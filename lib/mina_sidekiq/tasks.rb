@@ -27,6 +27,8 @@
 
 # ### sidekiq
 # Sets the path to sidekiq.
+require "mina/bundler"
+
 set :sidekiq, -> { "#{fetch(:bundle_bin)} exec sidekiq" }
 
 # ### sidekiqctl
@@ -49,7 +51,7 @@ set :sidekiq_log, -> { "#{fetch(:current_path)}/log/sidekiq.log" }
 
 # ### sidekiq_pid
 # Sets the path to the pid file of a sidekiq worker
-set :sidekiq_pid, -> { "#{fetch(:shared_path)}/pids/sidekiq.pid" }
+set :sidekiq_pid, -> { "#{fetch(:shared_path)}/tmp/pids/sidekiq.pid" }
 
 # ### sidekiq_processes
 # Sets the number of sidekiq processes launched
@@ -132,6 +134,6 @@ namespace :sidekiq do
 
   desc "Tail log from server"
   task :log => :environment do
-    command %[tail -f #{sidekiq_log}]
+    command %[tail -f #{fetch(:sidekiq_log)}]
   end
 end
